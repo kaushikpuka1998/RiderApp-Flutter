@@ -55,6 +55,8 @@ flutter:
   assets:
     - images/abc.png
     - images/abc1.png
+    - images/cycleregister.png
+    - images/cyclelogin.jpg
   fonts:
     - family: Roboto
       fonts:

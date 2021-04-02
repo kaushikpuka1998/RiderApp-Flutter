@@ -1,16 +1,20 @@
+import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+
 class loginscreen extends StatelessWidget {
+
+  static const String idScreen = "login";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(height: 115),
           Image(
-              image: AssetImage("images/abc1.png"),
+              image: AssetImage("images/cyclelogin.jpg"),
             width: 370,
             height: 170,
             alignment: Alignment.topCenter,
@@ -83,6 +87,7 @@ class loginscreen extends StatelessWidget {
                     onPressed: ()
                     {
                       print("Login Button Clicked");
+
                     },
 
                   )
@@ -97,6 +102,8 @@ class loginscreen extends StatelessWidget {
           FlatButton(onPressed:()
               {
                   print("Button Clicked");
+
+                  Navigator.pushNamedAndRemoveUntil(context, registrationScreen.idScreen, (route) => false);
               },
             textColor: Colors.red,
               child: Text(
