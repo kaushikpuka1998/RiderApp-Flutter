@@ -12,7 +12,7 @@ class loginscreen extends StatelessWidget {
         backgroundColor: Colors.white,
       body: Column(
         children: [
-          SizedBox(height: 115),
+          SizedBox(height: 75),
           Image(
               image: AssetImage("images/cyclelogin.jpg"),
             width: 370,
@@ -33,6 +33,7 @@ class loginscreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 15,),
                   TextFormField(
+
                     keyboardType:TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: "Email",
