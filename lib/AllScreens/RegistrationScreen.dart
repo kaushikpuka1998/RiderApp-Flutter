@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloned_uber/AllScreens/LoginScreen.dart';
 import 'package:cloned_uber/AllScreens/mainScreen.dart';
+import 'package:cloned_uber/AllWidget/progressDialog.dart';
 import 'package:cloned_uber/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -218,8 +219,17 @@ class registrationScreen extends StatelessWidget {
 
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  registerNewUser(BuildContext context) async
+  void registerNewUser(BuildContext context) async
   {
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context)
+        {
+          return ProgressDialog(message: "Registering, Please Wait..",);
+        }
+    );
 
     final UserCredential firebaseuser = (await firebaseAuth.createUserWithEmailAndPassword(email: emailEditingController.text, password: passwordEditingController.text));
 

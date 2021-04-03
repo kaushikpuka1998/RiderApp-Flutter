@@ -1,5 +1,6 @@
 import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
 import 'package:cloned_uber/AllScreens/mainScreen.dart';
+import 'package:cloned_uber/AllWidget/progressDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -136,6 +137,17 @@ class loginscreen extends StatelessWidget {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   void loginandAuthenticateUser(BuildContext context) async
   {
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context)
+        {
+          return ProgressDialog(message: "Authenticating,Please Wait..",);
+        }
+    );
+
+
     final User firebaseuser = (await firebaseAuth.signInWithEmailAndPassword(email: emailEditingController.text, password: passwordEditingController.text)).user!;
 
     if(FirebaseAuth.instance.currentUser!=null)
