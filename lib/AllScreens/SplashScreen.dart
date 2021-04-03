@@ -22,7 +22,7 @@ class _spalshscreenState extends State<spalshscreen> {
 
       splash: Image.asset('images/cyclegif.gif'),
 
-      nextScreen: mainscreen(),
+      nextScreen: loginscreen(),
       splashTransition: SplashTransition.fadeTransition,
       backgroundColor: Colors.white,
       splashIconSize: 170,

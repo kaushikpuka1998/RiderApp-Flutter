@@ -75,7 +75,17 @@ flutter:
         - asset: fonts/Roboto-Bold.ttf
         - asset: fonts/Roboto-Regular.ttf
           weight: 700
+    - family: Monaco
+      fonts:
+        - asset: fonts/Monaco.ttf
 
+    - family: Allura
+      fonts:
+        - asset: fonts/Allura-Regular.ttf
+
+    - family: Precious
+      fonts:
+            - asset: fonts/Precious.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

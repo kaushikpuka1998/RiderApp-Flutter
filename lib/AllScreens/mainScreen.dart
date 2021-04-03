@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class mainscreen extends StatefulWidget {
@@ -14,7 +16,7 @@ class _mainscreenState extends State<mainscreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Cycle Ride",),
+        title: Text("Cycle Ride",style: TextStyle(fontFamily: 'Roboto'),textAlign: TextAlign.center,),
 
       ),
       body: Column(

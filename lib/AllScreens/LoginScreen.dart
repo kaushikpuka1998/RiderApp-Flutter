@@ -1,11 +1,20 @@
 import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
+import 'package:cloned_uber/AllScreens/mainScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../main.dart';
 
 
 class loginscreen extends StatelessWidget {
 
   static const String idScreen = "login";
+
+  TextEditingController emailEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(resizeToAvoidBottomInset: false,
@@ -33,7 +42,7 @@ class loginscreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 15,),
                   TextFormField(
-
+                    controller: emailEditingController,
                     keyboardType:TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: "Email",
@@ -50,8 +59,9 @@ class loginscreen extends StatelessWidget {
 
                   SizedBox(height: 10,),
                   TextFormField(
+                    controller: passwordEditingController,
                     obscureText: true,
-                    keyboardType:TextInputType.emailAddress,
+                    keyboardType:TextInputType.visiblePassword,
                     decoration: InputDecoration(
                       labelText: "Password",
                       labelStyle: TextStyle(
@@ -89,6 +99,8 @@ class loginscreen extends StatelessWidget {
                     {
                       print("Login Button Clicked");
 
+                      loginandAuthenticateUser(context);
+
                     },
 
                   )
@@ -117,5 +129,45 @@ class loginscreen extends StatelessWidget {
         ],
       )
     );
+
+
+
+  }
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  void loginandAuthenticateUser(BuildContext context) async
+  {
+    final User firebaseuser = (await firebaseAuth.signInWithEmailAndPassword(email: emailEditingController.text, password: passwordEditingController.text)).user!;
+
+    if(FirebaseAuth.instance.currentUser!=null)
+    {
+      //save to database
+
+
+
+      userref.child(firebaseAuth.currentUser!.uid).once().then((DataSnapshot snap){
+        if(snap.value!= null)
+          {
+            displayToastMsg("Congratulation,Login Success", context);
+            print("Congrats");
+            Navigator.pushNamedAndRemoveUntil(context, mainscreen.idScreen, (route) => false);
+          }
+        else{
+          firebaseAuth.signOut();
+          displayToastMsg("No Record Exists for the User", context);
+          print("No Record Exists for the User");
+        }
+      });
+
+    }else{
+      //error occured;
+      displayToastMsg("Error Occoured ,Not Signed In", context);
+    }
+  }
+
+
+
+  displayToastMsg(String msg,BuildContext context)
+  {
+    Fluttertoast.showToast(msg:msg);
   }
 }
