@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloned_uber/AllScreens/LoginScreen.dart';
+import 'package:cloned_uber/AllScreens/mainScreen.dart';
 import 'package:cloned_uber/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -245,6 +246,7 @@ class registrationScreen extends StatelessWidget {
         password2EditingController.clear();
 
         displayToastMsg("Congratulation Your Account has been Created", context);
+        Navigator.pushNamedAndRemoveUntil(context, mainscreen.idScreen, (route) => false);
 
 
 

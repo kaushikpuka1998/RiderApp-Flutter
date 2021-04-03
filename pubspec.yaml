@@ -68,6 +68,7 @@ flutter:
     - images/cycleregister.png
     - images/cyclelogin.jpg
     - images/cyclegif.gif
+    - images/bluecyclegif.gif
   fonts:
     - family: Roboto
       fonts:

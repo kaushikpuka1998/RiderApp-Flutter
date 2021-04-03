@@ -1,9 +1,12 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:cloned_uber/AllScreens/SplashScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
 import 'package:cloned_uber/AllScreens/LoginScreen.dart';
+import 'package:cloned_uber/AllScreens/mainScreen.dart';
 import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
 import 'package:lottie/lottie.dart';
 
@@ -22,14 +25,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Uber Clone',
-      home: AnimatedSplashScreen(
-        splash: Image.asset('images/cyclegif.gif'),
-        nextScreen: loginscreen(),
-        splashTransition: SplashTransition.fadeTransition,
-        backgroundColor: Colors.white,
-        splashIconSize: 170,
 
-      ),
+      home: spalshscreen(),
+      debugShowCheckedModeBanner: false,
+
+
+
 
       theme: ThemeData(
         // This is the theme of your application.
@@ -42,14 +43,21 @@ class MyApp extends StatelessWidget {
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
         primarySwatch: Colors.blue,
+
+
       ),
+
+      initialRoute: spalshscreen.idScreen,
 
 
       routes:
       {
-        registrationScreen.idScreen:(context) => registrationScreen(),
+        registrationScreen.idScreen: (context) => registrationScreen(),
         loginscreen.idScreen: (context) =>loginscreen(),
+        mainscreen.idScreen: (context) =>mainscreen(),
       },
+
+
     );
   }
 }
