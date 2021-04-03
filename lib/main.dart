@@ -1,9 +1,11 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloned_uber/AllScreens/LoginScreen.dart';
 import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
+import 'package:lottie/lottie.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +22,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Uber Clone',
+      home: AnimatedSplashScreen(
+        splash: Image.asset('images/cyclegif.gif'),
+        nextScreen: loginscreen(),
+        splashTransition: SplashTransition.fadeTransition,
+        backgroundColor: Colors.white,
+        splashIconSize: 170,
+
+      ),
+
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -32,7 +43,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      initialRoute:loginscreen.idScreen,
+
 
       routes:
       {

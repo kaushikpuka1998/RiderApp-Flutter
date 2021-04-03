@@ -25,13 +25,17 @@ dependencies:
     sdk: flutter
 
 
-
-  fluttertoast: ^8.0.3
+  fluttertoast: "^8.0.3"
 
   firebase_auth: "^1.0.1"
 
 
   firebase_database: "^6.0.0"
+
+
+  lottie: "^1.0.1"
+
+  animated_splash_screen: "^1.1.0"
 
 
 
@@ -59,10 +63,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - images/abc.png
-    - images/abc1.png
+    - images/cycleanother.jpg
+    - images/cyclenew.jpg
     - images/cycleregister.png
     - images/cyclelogin.jpg
+    - images/cyclegif.gif
   fonts:
     - family: Roboto
       fonts:
