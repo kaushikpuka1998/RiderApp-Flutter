@@ -16,6 +16,7 @@ class registrationScreen extends StatelessWidget {
   TextEditingController emailEditingController = TextEditingController();
   TextEditingController phoneEditingController = TextEditingController();
   TextEditingController passwordEditingController = TextEditingController();
+  TextEditingController password2EditingController = TextEditingController();
 
 
 
@@ -26,7 +27,7 @@ class registrationScreen extends StatelessWidget {
 
         body: Column(
           children: [
-            SizedBox(height: 25),
+            SizedBox(height: 5),
             Image(
               image: AssetImage("images/cycleregister.png"),
               width: 370,
@@ -45,7 +46,7 @@ class registrationScreen extends StatelessWidget {
               padding:EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  SizedBox(height: 15,),
+                  SizedBox(height: 5,),
                   TextFormField(
                     controller:nameEditingController,
                     keyboardType:TextInputType.name,
@@ -56,49 +57,49 @@ class registrationScreen extends StatelessWidget {
                       ),
                       hintStyle: TextStyle(
                         color: Colors.red,
-                        fontSize: 10.0,
+                        fontSize: 18.0,
                       ),
                     ),
-                    style: TextStyle(fontSize: 14.0),
+                    style: TextStyle(fontSize: 18.0),
                   ),
 
 
-                  SizedBox(height: 15,),
+                  SizedBox(height: 5,),
                   TextFormField(
                     controller:emailEditingController,
                     keyboardType:TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: "Email",
                       labelStyle: TextStyle(
-                          fontSize: 15,fontFamily: "Roboto",
+                          fontSize: 18,fontFamily: "Roboto",
                       ),
                       hintStyle: TextStyle(
                         color: Colors.red,
-                        fontSize: 10.0,
+                        fontSize: 18.0,
                       ),
                     ),
-                    style: TextStyle(fontSize: 14.0),
+                    style: TextStyle(fontSize: 18.0),
                   ),
 
 
-                  SizedBox(height: 15,),
+                  SizedBox(height: 5,),
                   TextFormField(
                     controller:phoneEditingController,
                     keyboardType:TextInputType.phone,
                     decoration: InputDecoration(
                       labelText: "Phone",
                       labelStyle: TextStyle(
-                        fontSize: 15,fontFamily: "Roboto",
+                        fontSize: 18,fontFamily: "Roboto",
                       ),
                       hintStyle: TextStyle(
                         color: Colors.red,
-                        fontSize: 10.0,
+                        fontSize: 18.0,
                       ),
                     ),
-                    style: TextStyle(fontSize: 14.0),
+                    style: TextStyle(fontSize: 18.0),
                   ),
 
-                  SizedBox(height: 10,),
+                  SizedBox(height: 5,),
                   TextFormField(
                     controller:passwordEditingController,
                     obscureText: true,
@@ -106,32 +107,33 @@ class registrationScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       labelText: "Password",
                       labelStyle: TextStyle(
-                          fontSize: 15,fontFamily: "Roboto",
+                          fontSize: 18,fontFamily: "Roboto",
                       ),
                       hintStyle: TextStyle(
                         color: Colors.red,
-                        fontSize: 10.0,
+                        fontSize: 18.0,
                       ),
                     ),
-                    style: TextStyle(fontSize: 14.0),
+                    style: TextStyle(fontSize: 18.0),
                   ),
 
 
-                  SizedBox(height: 10,),
+                  SizedBox(height: 5,),
                   TextFormField(
+                    controller: password2EditingController,
                     obscureText: true,
                     keyboardType:TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: "Confirm Password",
                       labelStyle: TextStyle(
-                        fontSize: 15,fontFamily: "Roboto"
+                        fontSize: 18,fontFamily: "Roboto"
                       ),
                       hintStyle: TextStyle(
                         color: Colors.red,
-                        fontSize: 10.0,
+                        fontSize: 18.0,
                       ),
                     ),
-                    style: TextStyle(fontSize: 14.0),
+                    style: TextStyle(fontSize: 18.0),
                   ),
 
 
@@ -159,13 +161,13 @@ class registrationScreen extends StatelessWidget {
                       print("Register Button Clicked");
 
                       if(nameEditingController.text.length < 4) {
-                        displayToastMsg("Name length Atleast 3!", context);
+                        displayToastMsg("Name length Atleast 4!", context);
                       }
                       else if(!emailEditingController.text.contains("@"))
                         {
                           displayToastMsg("Not a Valid Email", context);
                         }
-                      else if(phoneEditingController.text.isEmpty && phoneEditingController.text.length <10)
+                      else if(phoneEditingController.text.length <10)
                         {
                           displayToastMsg("Please Enter Valid Phone Number", context);
                         }
@@ -173,9 +175,13 @@ class registrationScreen extends StatelessWidget {
                         {
                           displayToastMsg("Password Length must be atleast 6", context);
                         }
+                      else if(passwordEditingController.text != password2EditingController.text)
+                        {
+                          displayToastMsg("Don't Match with the given Password", context);
+                        }
                       else{
                         registerNewUser(context);
-                        displayToastMsg("Congratulation Your Account has been Created", context);
+
                       }
 
                     },
@@ -231,6 +237,16 @@ class registrationScreen extends StatelessWidget {
         };
 
         userref.child(firebaseAuth.currentUser!.uid).set(userDataMap);
+
+        nameEditingController.clear();
+        emailEditingController.clear();
+        phoneEditingController.clear();
+        passwordEditingController.clear();
+        password2EditingController.clear();
+
+        displayToastMsg("Congratulation Your Account has been Created", context);
+
+
 
       }else{
       //error occured;
