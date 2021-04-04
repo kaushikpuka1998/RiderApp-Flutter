@@ -1,9 +1,13 @@
 import 'dart:async';
+
 import 'dart:ui';
 
 import 'package:cloned_uber/AllWidget/Divider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:geolocator/geolocator.dart';
+
 
 class mainscreen extends StatefulWidget {
 
@@ -18,6 +22,24 @@ class _mainscreenState extends State<mainscreen> {
   late GoogleMapController newgoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
+
+  late Position currentPosition;
+  var geolocator = Geolocator();
+
+  double bottomPaddingofMap = 0;
+
+
+  void locatePosition() async
+  {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    currentPosition = position;
+
+    LatLng latlngposition = LatLng(position.latitude, position.longitude);
+    CameraPosition cameraPosition = new CameraPosition(target: latlngposition,zoom: 14);
+    newgoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
+
+
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
@@ -84,13 +106,23 @@ class _mainscreenState extends State<mainscreen> {
       body: Stack(
         children: [
           GoogleMap(
+            padding: EdgeInsets.only(bottom: bottomPaddingofMap),
             mapType: MapType.normal,
             myLocationButtonEnabled: true,
             initialCameraPosition: _kGooglePlex,
+            myLocationEnabled: true,
+            zoomControlsEnabled: true,
+            zoomGesturesEnabled: true,
             onMapCreated: (GoogleMapController controller){
 
               _controllergooglemap.complete(controller);
               newgoogleMapController = controller;
+
+              setState(() {
+                bottomPaddingofMap = 330.0;
+              });
+
+              locatePosition();
             },
           ),
           //Humburger Button
