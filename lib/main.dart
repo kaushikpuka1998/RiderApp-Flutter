@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Uber Clone',
 
-      home: loginscreen(),
+      home: new mainscreen(),
       debugShowCheckedModeBanner: false,
 
 
@@ -46,8 +46,6 @@ class MyApp extends StatelessWidget {
 
 
       ),
-
-      initialRoute: spalshscreen.idScreen,
 
 
       routes:

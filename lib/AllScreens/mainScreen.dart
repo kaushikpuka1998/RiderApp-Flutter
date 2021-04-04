@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class mainscreen extends StatefulWidget {
 
@@ -10,6 +12,13 @@ class mainscreen extends StatefulWidget {
 }
 
 class _mainscreenState extends State<mainscreen> {
+
+  Completer<GoogleMapController> _controllergooglemap = Completer();
+  late GoogleMapController newgoogleMapController;
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
 
@@ -19,10 +28,18 @@ class _mainscreenState extends State<mainscreen> {
         title: Text("Cycle Ride",style: TextStyle(fontFamily: 'Roboto'),textAlign: TextAlign.center,),
 
       ),
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: 15,),
-          Image(image: AssetImage("images/cyclenew.jpg"),)
+          GoogleMap(
+            mapType: MapType.normal,
+            myLocationButtonEnabled: true,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller){
+
+              _controllergooglemap.complete(controller);
+              newgoogleMapController = controller;
+            },
+          ),
         ],
       ),
     );

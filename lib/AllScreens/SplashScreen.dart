@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
 import 'package:cloned_uber/AllScreens/mainScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -22,7 +23,7 @@ class _spalshscreenState extends State<spalshscreen> {
 
       splash: Image.asset('images/cyclegif.gif'),
 
-      nextScreen: loginscreen(),
+      nextScreen: new loginscreen(),
       splashTransition: SplashTransition.fadeTransition,
       backgroundColor: Colors.white,
       splashIconSize: 170,
