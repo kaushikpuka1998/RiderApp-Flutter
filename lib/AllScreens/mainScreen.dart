@@ -3,10 +3,12 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:cloned_uber/AllWidget/Divider.dart';
+import 'package:cloned_uber/Assistants/assistantMethods.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 
 
 class mainscreen extends StatefulWidget {
@@ -37,6 +39,9 @@ class _mainscreenState extends State<mainscreen> {
     LatLng latlngposition = LatLng(position.latitude, position.longitude);
     CameraPosition cameraPosition = new CameraPosition(target: latlngposition,zoom: 14);
     newgoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+    String address = await AssistantMethods.searchCoordinateAddress(position);
+    print("This is Your Location "+address);
   }
 
 
