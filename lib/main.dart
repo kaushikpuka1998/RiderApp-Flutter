@@ -1,5 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cloned_uber/AllScreens/SplashScreen.dart';
+import 'package:cloned_uber/DataHandler/appData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) {  },
+      create: (context) =>AppData(),
       child: MaterialApp(
         title: 'Uber Clone',
 

@@ -1,14 +1,15 @@
 class Address
 {
-  final String placeFormattedAddress;
-  late String placeName;
-  late String placeid;
-  late double latitude;
-  late double longitude;
+  String locality;
+  String principalSubdivision;
+  String countryCode;
+  String wholeadd;
 
-  Address({required this.placeFormattedAddress,required this.placeName,required this.placeid,required this.latitude,required this.longitude});
-
-
+  double latitude;
+  double longitude;
 
 
+  Address(
+      this.locality,this.principalSubdivision,this.countryCode,this.wholeadd,this.latitude, this.longitude
+      );
 }

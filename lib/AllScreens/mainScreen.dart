@@ -4,11 +4,14 @@ import 'dart:ui';
 
 import 'package:cloned_uber/AllWidget/Divider.dart';
 import 'package:cloned_uber/Assistants/assistantMethods.dart';
+import 'package:cloned_uber/DataHandler/appData.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+import 'package:cloned_uber/DataHandler/appData.dart';
 
 
 class mainscreen extends StatefulWidget {
@@ -40,8 +43,8 @@ class _mainscreenState extends State<mainscreen> {
     CameraPosition cameraPosition = new CameraPosition(target: latlngposition,zoom: 14);
     newgoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-    String address = await AssistantMethods.searchCoordinateAddress(position);
-    print("This is Your Location "+address);
+    String address = await AssistantMethods.searchCoordinateAddress(position,context);
+    print("This is Your Location => "+address);
   }
 
 
@@ -227,7 +230,9 @@ class _mainscreenState extends State<mainscreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Add Home"),
+                            Text(
+                              Provider.of<AppData>(context).pickUpLocation != null ? Provider.of<AppData>(context).pickUpLocation.wholeadd:"Add home",
+                            ),
                             SizedBox(height: 4.0,),
                             Text("Your Home Address ",style: TextStyle(color: Colors.black54,fontSize: 12.0))
                           ],
