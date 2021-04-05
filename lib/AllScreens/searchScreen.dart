@@ -1,4 +1,6 @@
+import 'package:cloned_uber/Assistants/requestAssistant.dart';
 import 'package:cloned_uber/DataHandler/appData.dart';
+import 'package:cloned_uber/configMap.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -102,6 +104,11 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(3.0),
                           child: TextField(
+
+                            onChanged: (val)
+                            {
+                              findplace(val);
+                            },
                             controller: dropdownlocationEditingController,
                             decoration: InputDecoration(
                                 hintText: "Where want to go?",
@@ -123,5 +130,28 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
       ),
     );
+  }
+
+  void findplace(String placename) async
+  {
+
+    if(placename.length > 1)
+    {
+        //String autocompleteurl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placename&key=$mapkey&sessiontoken=1234567890";
+        String autocompleteurl = "https://api.tomtom.com/search/2/autocomplete/$placename.json?key=$tomtomkey&language=en-GB";
+
+
+
+        var res = await RequestAssistant.getRequest(autocompleteurl);
+
+        if(res == "failed")
+          {
+            return;
+          }
+
+        print("Places Predictions:======");
+        print(res);
+    }
+
   }
 }
