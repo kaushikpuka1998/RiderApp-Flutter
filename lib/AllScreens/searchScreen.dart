@@ -1,8 +1,15 @@
+import 'dart:math';
+
+import 'package:cloned_uber/AllWidget/Divider.dart';
 import 'package:cloned_uber/Assistants/requestAssistant.dart';
 import 'package:cloned_uber/DataHandler/appData.dart';
+import 'package:cloned_uber/Models/placePredictions.dart';
 import 'package:cloned_uber/configMap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class SearchScreen extends StatefulWidget {
 
@@ -15,10 +22,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
   TextEditingController pickuplocationEditingController = TextEditingController();
   TextEditingController dropdownlocationEditingController = TextEditingController();
+
+  List<PlacePredictions> placePredictionList =[];
   @override
   Widget build(BuildContext context) {
 
-    String placeAddress = Provider.of<AppData>(context).pickUpLocation.wholeadd ?? "";
+    String placeAddress = Provider.of<AppData>(context).pickUpLocation.wholeadd;
     pickuplocationEditingController.text = placeAddress;
     return Scaffold(
       body: Column(
@@ -46,8 +55,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     children: [
                       GestureDetector(
                           onTap:(){
-                              Navigator.pop(context);
-                            },
+                            Navigator.pop(context);
+                          },
 
                           child: Icon(Icons.arrow_back_ios_new)
                       ),
@@ -56,18 +65,18 @@ class _SearchScreenState extends State<SearchScreen> {
                       )
                     ],
                   ),
-                  
-                  
+
+
                   SizedBox(height: 16.0,),
                   Row(
                     children: [
                       Image.asset("images/greenlocation.png",height: 25.0,width: 25.0,),
-                      
+
                       SizedBox(width: 18.0,),
                       Expanded(child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5.0)
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0)
                         ),
                         child: Padding(
                           padding: EdgeInsets.all(3.0),
@@ -75,12 +84,12 @@ class _SearchScreenState extends State<SearchScreen> {
 
                             controller: pickuplocationEditingController,
                             decoration: InputDecoration(
-                              hintText: "Pick Up Location",
-                              fillColor: Colors.grey[200],
-                              filled:true,
-                              border: InputBorder.none,
-                              isDense: true,
-                              contentPadding: EdgeInsets.only(left: 10,top:8,bottom: 8.0)
+                                hintText: "Pick Up Location",
+                                fillColor: Colors.grey[200],
+                                filled:true,
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.only(left: 10,top:8,bottom: 8.0)
                             ),
                           ),
                         ),
@@ -93,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   Row(
                     children: [
-                        Image.asset("images/redlocation.png",height: 25.0,width: 25,),
+                      Image.asset("images/redlocation.png",height: 25.0,width: 25,),
 
                       SizedBox(width: 18.0,),
                       Expanded(child: Container(
@@ -126,7 +135,28 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
             ),
-          )
+          ),
+
+
+            (placePredictionList.length > 0)?
+
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0,horizontal: 22.0),
+                child: ListView.separated(
+                  padding: EdgeInsets.all(1.0),
+                  itemBuilder: (context,index)
+                  {
+                    return PredictionTile(placePredictions: placePredictionList[index]);
+                  },
+                  separatorBuilder: (BuildContext context,int index) =>DividerWidget(),
+                  itemCount: placePredictionList.length,
+                  shrinkWrap: true,
+
+                  physics:ClampingScrollPhysics(),
+
+                ),
+              ):Container(),
+          
         ],
       ),
     );
@@ -137,21 +167,92 @@ class _SearchScreenState extends State<SearchScreen> {
 
     if(placename.length > 1)
     {
-        //String autocompleteurl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placename&key=$mapkey&sessiontoken=1234567890";
-        String autocompleteurl = "https://api.tomtom.com/search/2/autocomplete/$placename.json?key=$tomtomkey&language=en-GB";
+      //String autocompleteurl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placename&key=$mapkey&sessiontoken=1234567890";
+      String autocompleteurl = "https://api.mapbox.com/geocoding/v5/mapbox.places/$placename.json?worldview=cn&access_token=$mapbox";
 
 
 
-        var res = await RequestAssistant.getRequest(autocompleteurl);
+      var res = await RequestAssistant.getRequest(autocompleteurl);
 
-        if(res == "failed")
+      if(res == "failed")
+      {
+        return;
+      }
+
+
+
+      print("Places Predictions:======");
+
+
+
+      if(res["type"] == "FeatureCollection")
+      {
+
+        var predictions = res["features"] as List;
+        print(predictions);
+
+        List<PlacePredictions> store =[];
+
+
+        for(var ghj in predictions)
           {
-            return;
+            store.add(new PlacePredictions(ghj["place_name"],ghj["text"]));
           }
 
-        print("Places Predictions:======");
-        print(res);
+
+
+
+        setState(() {
+
+          placePredictionList=store;
+        });
+
+
+
+
+      }
     }
 
   }
 }
+
+class PredictionTile extends StatelessWidget {
+
+
+  PlacePredictions placePredictions=new PlacePredictions("","");
+
+  PredictionTile({Key? key,required this.placePredictions}) : super(key: key);
+  @override
+  Widget build(BuildContext context)
+  {
+    return Container(
+      child: Column(
+        children: [
+          SizedBox(width: 14.0,),
+           Row(
+            children: [
+              Icon(Icons.add_location),
+              SizedBox(width: 12.0,),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Text(placePredictions.place_name??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.lightBlue,fontFamily: "Roboto",fontSize: 16.0,),),
+                    SizedBox(height:6.0),
+                    Text(placePredictions.shortlocation??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 12.0,),),
+
+
+                  ],
+                ),
+              )
+            ],
+          ),
+
+          SizedBox(width: 10.0,)
+        ],
+      ),
+    );
+  }
+}
+
