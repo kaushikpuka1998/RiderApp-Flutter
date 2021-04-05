@@ -1,13 +1,23 @@
+import 'package:cloned_uber/DataHandler/appData.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
+
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+
+  TextEditingController pickuplocationEditingController = TextEditingController();
+  TextEditingController dropdownlocationEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+
+    String placeAddress = Provider.of<AppData>(context).pickUpLocation.wholeadd ?? "";
+    pickuplocationEditingController.text = placeAddress;
     return Scaffold(
       body: Column(
         children: [
@@ -60,6 +70,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(3.0),
                           child: TextField(
+
+                            controller: pickuplocationEditingController,
                             decoration: InputDecoration(
                               hintText: "Pick Up Location",
                               fillColor: Colors.grey[200],
@@ -90,6 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(3.0),
                           child: TextField(
+                            controller: dropdownlocationEditingController,
                             decoration: InputDecoration(
                                 hintText: "Where want to go?",
                                 fillColor: Colors.grey[200],
