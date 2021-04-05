@@ -84,6 +84,9 @@ flutter:
     - images/cyclegif.gif
     - images/bluecyclegif.gif
     - images/profilepic.png
+    - images/locationpickicon.jpg
+    - images/redlocation.png
+    - images/greenlocation.png
   fonts:
     - family: Roboto
       fonts:
