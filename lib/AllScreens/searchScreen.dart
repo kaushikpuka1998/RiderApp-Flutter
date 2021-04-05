@@ -241,7 +241,7 @@ class PredictionTile extends StatelessWidget {
                     Text(placePredictions.place_name??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.lightBlue,fontFamily: "Roboto",fontSize: 16.0,),),
                     SizedBox(height:6.0),
                     Text(placePredictions.shortlocation??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 12.0,),),
-
+                    SizedBox(height:15.0),
 
                   ],
                 ),
