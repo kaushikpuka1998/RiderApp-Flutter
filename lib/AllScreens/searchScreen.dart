@@ -31,6 +31,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     String placeAddress = Provider.of<AppData>(context).pickUpLocation.wholeadd;
     pickuplocationEditingController.text = placeAddress;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -47,6 +48,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   offset: Offset(0.7,0.7),
                 )
               ],
+
             ),
 
             child: Padding(
@@ -81,6 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5.0)
                         ),
+
                         child: Padding(
                           padding: EdgeInsets.all(3.0),
                           child: TextField(
@@ -104,7 +107,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   SizedBox(height: 10,),
 
                   Row(
-                    children: [
+
+                    children:[
                       Image.asset("images/redlocation.png",height: 25.0,width: 25,),
 
                       SizedBox(width: 18.0,),
@@ -155,7 +159,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: placePredictionList.length,
                   shrinkWrap: true,
 
-                  physics:ClampingScrollPhysics(),
+                  physics:AlwaysScrollableScrollPhysics(),
 
                 ),
               ):Container(),
@@ -171,7 +175,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if(placename.length > 1)
     {
       //String autocompleteurl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placename&key=$mapkey&sessiontoken=1234567890";
-      String autocompleteurl = "https://api.geoapify.com/v1/geocode/autocomplete?text=$placename&lang=en&limit=20&type=amenity&bias=countrycode:auto&apiKey=$geoapikey";
+      String autocompleteurl = "https://api.geoapify.com/v1/geocode/autocomplete?text=$placename&lang=en&limit=7&type=amenity&bias=countrycode:auto&apiKey=$geoapikey";
 
 
 
@@ -232,16 +236,19 @@ class PredictionTile extends StatelessWidget {
   Widget build(BuildContext context)
   {
     return FlatButton(
-      
+
       padding: EdgeInsets.all(0.0),
+
       onPressed: (){
           getPlaceAddressDetails(placePredictions.place_id, context);
       },
+
       child: Container(
         child: Column(
           children: [
-            SizedBox(width: 14.0,),
-             Row(
+
+
+            Row(
               children: [
                 Icon(Icons.add_location),
                 SizedBox(width: 12.0,),
