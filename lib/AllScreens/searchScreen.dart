@@ -30,6 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
     String placeAddress = Provider.of<AppData>(context).pickUpLocation.wholeadd;
     pickuplocationEditingController.text = placeAddress;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Container(
@@ -168,7 +169,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if(placename.length > 1)
     {
       //String autocompleteurl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placename&key=$mapkey&sessiontoken=1234567890";
-      String autocompleteurl = "https://api.mapbox.com/geocoding/v5/mapbox.places/$placename.json?worldview=cn&access_token=$mapbox";
+      String autocompleteurl = "https://api.geoapify.com/v1/geocode/autocomplete?text=$placename&limit=5&apiKey=$geoapikey";
 
 
 
@@ -189,14 +190,17 @@ class _SearchScreenState extends State<SearchScreen> {
       {
 
         var predictions = res["features"] as List;
-        print(predictions);
+        //print(predictions);
 
         List<PlacePredictions> store =[];
 
 
         for(var ghj in predictions)
           {
-            store.add(new PlacePredictions(ghj["place_name"],ghj["text"]));
+            print(ghj["properties"]["formatted"]);
+
+
+            store.add(new PlacePredictions(ghj["properties"]["formatted"],ghj["properties"]["city"]));
           }
 
 
@@ -225,34 +229,48 @@ class PredictionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context)
   {
-    return Container(
-      child: Column(
-        children: [
-          SizedBox(width: 14.0,),
-           Row(
-            children: [
-              Icon(Icons.add_location),
-              SizedBox(width: 12.0,),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+    return FlatButton(
+      
+      padding: EdgeInsets.all(0.0),
+      onPressed: (){
 
-                    Text(placePredictions.place_name??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.lightBlue,fontFamily: "Roboto",fontSize: 16.0,),),
-                    SizedBox(height:6.0),
-                    Text(placePredictions.shortlocation??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 12.0,),),
-                    SizedBox(height:15.0),
+      },
+      child: Container(
+        child: Column(
+          children: [
+            SizedBox(width: 14.0,),
+             Row(
+              children: [
+                Icon(Icons.add_location),
+                SizedBox(width: 12.0,),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-                  ],
-                ),
-              )
-            ],
-          ),
+                      Text(placePredictions.place_name??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.lightBlue,fontFamily: "Roboto",fontSize: 16.0,),),
+                      SizedBox(height:6.0),
+                      Text(placePredictions.shortlocation??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 12.0,),),
+                      SizedBox(height:15.0),
 
-          SizedBox(width: 10.0,)
-        ],
+                    ],
+                  ),
+                )
+              ],
+            ),
+
+            SizedBox(width: 10.0,)
+          ],
+        ),
       ),
     );
+  }
+
+
+  void getPlaceAddressDetails(String)
+  {
+    //String placeDetailsurl = "https://api.geoapify.com/v2/place-details?id=51f644323f122e5640598dc2f2b798863a40f00103f9014d2a90d80100000092030e4261617a6172204b6f6c6b617461&features=walk_10,walk_10.supermarket,walk_10.restaurant,details,radius_500,radius_500.supermarket,radius_500.restaurant,drive_5,drive_5.supermarket,drive_5.fuel,drive_5.parking&apiKey=$geoapikey";
+
   }
 }
 
