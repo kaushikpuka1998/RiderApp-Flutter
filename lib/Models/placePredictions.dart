@@ -4,9 +4,11 @@ class PlacePredictions
 {
   String place_name="";
   String shortlocation="";
+  String place_id="";
+  String country ="";
 
 
-  PlacePredictions(this.place_name,this.shortlocation);
+  PlacePredictions(this.place_name,this.shortlocation,this.place_id,this.country);
 
 
 

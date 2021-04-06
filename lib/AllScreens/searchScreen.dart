@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import 'package:cloned_uber/AllWidget/Divider.dart';
+import 'package:cloned_uber/AllWidget/progressDialog.dart';
 import 'package:cloned_uber/Assistants/requestAssistant.dart';
 import 'package:cloned_uber/DataHandler/appData.dart';
+import 'package:cloned_uber/Models/address.dart';
 import 'package:cloned_uber/Models/placePredictions.dart';
 import 'package:cloned_uber/configMap.dart';
 import 'package:flutter/material.dart';
@@ -169,7 +171,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if(placename.length > 1)
     {
       //String autocompleteurl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placename&key=$mapkey&sessiontoken=1234567890";
-      String autocompleteurl = "https://api.geoapify.com/v1/geocode/autocomplete?text=$placename&limit=5&apiKey=$geoapikey";
+      String autocompleteurl = "https://api.geoapify.com/v1/geocode/autocomplete?text=$placename&lang=en&limit=20&type=amenity&bias=countrycode:auto&apiKey=$geoapikey";
 
 
 
@@ -190,17 +192,17 @@ class _SearchScreenState extends State<SearchScreen> {
       {
 
         var predictions = res["features"] as List;
-        //print(predictions);
+        print(predictions);
 
         List<PlacePredictions> store =[];
 
 
         for(var ghj in predictions)
           {
-            print(ghj["properties"]["formatted"]);
+            //print(ghj["properties"]["formatted"]);
 
 
-            store.add(new PlacePredictions(ghj["properties"]["formatted"],ghj["properties"]["city"]));
+            store.add(new PlacePredictions(ghj["properties"]["formatted"],ghj["properties"]["city"],ghj["properties"]["place_id"],ghj["properties"]["country_code"]));
           }
 
 
@@ -223,7 +225,7 @@ class _SearchScreenState extends State<SearchScreen> {
 class PredictionTile extends StatelessWidget {
 
 
-  PlacePredictions placePredictions=new PlacePredictions("","");
+  PlacePredictions placePredictions=new PlacePredictions("","","","");
 
   PredictionTile({Key? key,required this.placePredictions}) : super(key: key);
   @override
@@ -233,7 +235,7 @@ class PredictionTile extends StatelessWidget {
       
       padding: EdgeInsets.all(0.0),
       onPressed: (){
-
+          getPlaceAddressDetails(placePredictions.place_id, context);
       },
       child: Container(
         child: Column(
@@ -250,9 +252,9 @@ class PredictionTile extends StatelessWidget {
 
                       Text(placePredictions.place_name??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.lightBlue,fontFamily: "Roboto",fontSize: 16.0,),),
                       SizedBox(height:6.0),
-                      Text(placePredictions.shortlocation??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 12.0,),),
+                      Text(placePredictions.shortlocation??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 14.0,),),
+                      Text(placePredictions.country.toUpperCase(),overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.red,fontFamily: "Roboto",fontSize: 10.0,),),
                       SizedBox(height:15.0),
-
                     ],
                   ),
                 )
@@ -267,9 +269,67 @@ class PredictionTile extends StatelessWidget {
   }
 
 
-  void getPlaceAddressDetails(String)
+  void getPlaceAddressDetails(String place_id,context) async
   {
-    //String placeDetailsurl = "https://api.geoapify.com/v2/place-details?id=51f644323f122e5640598dc2f2b798863a40f00103f9014d2a90d80100000092030e4261617a6172204b6f6c6b617461&features=walk_10,walk_10.supermarket,walk_10.restaurant,details,radius_500,radius_500.supermarket,radius_500.restaurant,drive_5,drive_5.supermarket,drive_5.fuel,drive_5.parking&apiKey=$geoapikey";
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>ProgressDialog(message: "Saving Drop Off Locatio...",)
+    );
+    String placeDetailsurl = "https://api.geoapify.com/v2/place-details?id=$place_id&features=walk_10,details,radius_500,drive_5,drive_5.shopping_mall,drive_5.fuel,drive_5.parking,details.names&apiKey=$geoapikey";
+
+    var res = await RequestAssistant.getRequest(placeDetailsurl);
+
+    //print(res);
+
+    Navigator.pop(context);
+
+    if(res == "failed")
+    {
+        return;
+    }
+
+    if(res["type"] == "FeatureCollection")
+    {
+      Address address = new Address("","",0.0,0.0);
+
+
+
+      var predictions = res["features"] as List;
+
+      //print(predictions);
+
+
+      for(var abc in predictions)
+        {
+            address.placeid = place_id;
+            print(place_id);
+
+
+            if(abc["properties"]["feature_type"]=="details")
+              {
+                address.wholeadd =abc["properties"]["formatted"];
+                print(address.wholeadd);
+                address.latitude = abc["properties"]["lat"];
+                print(address.latitude);
+                address.longitude = abc["properties"]["lon"];
+                print(address.longitude);
+              }
+
+
+
+        }
+
+      Provider.of<AppData>(context,listen: false).updatedropdownAddress(address);
+      print("hello====>>"+address.wholeadd);
+
+
+
+
+
+
+
+    }
 
   }
 }

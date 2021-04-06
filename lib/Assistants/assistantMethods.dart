@@ -6,7 +6,7 @@ import 'package:cloned_uber/configMap.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:io';
 class AssistantMethods
 {
   static get placeid => null;
@@ -15,27 +15,37 @@ class AssistantMethods
     {
       String placeAddress  = "";
 
-      String url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.latitude}&longitude=${position.longitude}&localityLanguage=en";
+      //String url = "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.latitude}&longitude=${position.longitude}&localityLanguage=en";
+      String url = "https://api.geoapify.com/v1/geocode/reverse?lat=${position.latitude}&lon=${position.longitude}&apiKey=$geoapikey";
 
       var response = await RequestAssistant.getRequest(url);
 
       if(response != "Failed")
       {
-        String placeadd = response["locality"];
-        placeAddress = placeadd;
-        placeAddress+=", ";
-        String principalsub = response["principalSubdivision"];
-        placeAddress+=principalsub;
-        placeAddress+=", ";
-        String cntcode = response["countryCode"];
-        placeAddress+=cntcode;
 
-        String newadd = placeAddress;
+
+        var predictions = response["features"] as List;
+        String placeadd = "";
+        String placeid2 = "";
+        for(var abc in predictions)
+          {
+            placeadd = abc["properties"]["city"];
+
+
+            String tmp = abc["properties"]["country_code"].toUpperCase();
+            placeadd+=", "+abc["properties"]["state"]+", "+tmp;
+
+            placeid2 = abc["properties"]["place_id"];
+            print(placeadd);
+          }
+
+
+
 
         //print(newadd);
 
 
-        Address userpickedUpAddress = new Address(placeadd, principalsub, cntcode,newadd,position. latitude, position.longitude);
+        Address userpickedUpAddress = new Address(placeid2,placeadd,position. latitude, position.longitude);
 
         Provider.of<AppData>(context,listen: false).updatePickuplocationAddress(userpickedUpAddress);
         
