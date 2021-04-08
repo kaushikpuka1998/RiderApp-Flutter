@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 
 import 'dart:ui';
@@ -7,8 +8,11 @@ import 'package:cloned_uber/AllScreens/searchScreen.dart';
 import 'package:cloned_uber/AllWidget/Divider.dart';
 import 'package:cloned_uber/AllWidget/progressDialog.dart';
 import 'package:cloned_uber/Assistants/assistantMethods.dart';
+import 'package:cloned_uber/Assistants/requestAssistant.dart';
 import 'package:cloned_uber/DataHandler/appData.dart';
+import 'package:cloned_uber/configMap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
@@ -31,10 +35,14 @@ class _mainscreenState extends State<mainscreen> {
 
   GlobalKey<ScaffoldState> scaffoldkey = new GlobalKey<ScaffoldState>();
 
+  List<LatLng> pLineCordinates = [];
+  Set<Polyline> polylineSet= {};
+
   late Position currentPosition;
   var geolocator = Geolocator();
 
   double bottomPaddingofMap = 0;
+
 
 
   void locatePosition() async
@@ -124,6 +132,7 @@ class _mainscreenState extends State<mainscreen> {
             myLocationEnabled: true,
             zoomControlsEnabled: true,
             zoomGesturesEnabled: true,
+            polylines: polylineSet,
             onMapCreated: (GoogleMapController controller){
 
               _controllergooglemap.complete(controller);
@@ -305,6 +314,66 @@ class _mainscreenState extends State<mainscreen> {
     print("${details!.duration}hr ");
     print("LOCATION TO ACHIEVE in distance=====================");
     print("${details!.distancevalue}KM");
+
+
+
+    String directionUrl = "https://api.geoapify.com/v1/routing?waypoints=${initpos.latitude},${initpos.longitude}|${finalpos.latitude},${finalpos.longitude}&mode=drive&lang=en&apiKey=$geoapikey";
+
+
+
+
+    var res = await RequestAssistant.getRequest(directionUrl);
+
+    //double a1=0.0,a2 =0.0;
+    pLineCordinates.clear();
+    polylineSet.clear();
+    var allfeature = res["features"] as List;
+      pLineCordinates.clear();
+      for( var abc in allfeature)
+        {
+          //print(abc["geometry"]["coordinates"]);
+          for(var allcordinate in abc["geometry"]["coordinates"])
+            {
+              for( var eachcordinate in allcordinate)
+                {
+                  //a1= eachcordinate[1];
+                  //a2 = eachcordinate[0];
+
+                  pLineCordinates.add(LatLng(eachcordinate[1],eachcordinate[0]));
+
+                  print("${eachcordinate[1]},${eachcordinate[0]}");
+                }
+
+
+
+
+            }
+
+          //
+        }
+
+
+
+
+      polylineSet.clear();
+      setState(() {
+        Polyline polyline = Polyline(
+            color: Colors.redAccent,
+            polylineId: PolylineId("PolylineID"),
+            jointType: JointType.round,
+            points:pLineCordinates,
+            width: 5,
+            //startCap: Cap.roundCap,
+            //endCap: Cap.roundCap,
+            //geodesic: true
+        );
+
+        polylineSet.add(polyline);
+      });
+      
+
+
+
 
   }
 }

@@ -66,7 +66,8 @@ class AssistantMethods
 
     var res = await RequestAssistant.getRequest(directionUrl);
 
-    if(res =="failed")
+    //print("RES=>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+res);
+    if(res == "Failed")
     {
       return null;
     }
