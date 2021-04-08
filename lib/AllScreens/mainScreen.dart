@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:cloned_uber/AllScreens/searchScreen.dart';
 import 'package:cloned_uber/AllWidget/Divider.dart';
+import 'package:cloned_uber/AllWidget/progressDialog.dart';
 import 'package:cloned_uber/Assistants/assistantMethods.dart';
 import 'package:cloned_uber/DataHandler/appData.dart';
 import 'package:flutter/material.dart';
@@ -199,9 +200,13 @@ class _mainscreenState extends State<mainscreen> {
                     Text("Where to?",style: TextStyle(fontSize: 20.0,fontFamily: "Roboto"),),
                     SizedBox(height:20.0),
                     GestureDetector(
-                      onTap: ()
+                      onTap: () async
                       {
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>SearchScreen()));
+                        var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>SearchScreen()));
+                        if(res == "obtainDirection")
+                          {
+                            await getPlaceDirection();
+                          }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -277,5 +282,29 @@ class _mainscreenState extends State<mainscreen> {
         ],
       ),
     );
+
+
+  }
+
+  Future<void> getPlaceDirection() async
+  {
+    var initpos = Provider.of<AppData>(context,listen: false).pickUpLocation;
+    var finalpos = Provider.of<AppData>(context,listen: false).dropLocation;
+
+    LatLng  pickuplatlng = LatLng(initpos.latitude, initpos.longitude);
+    LatLng dropofflatlng = LatLng(finalpos.latitude, finalpos.longitude);
+
+
+    showDialog(context: context, builder: (BuildContext context) =>ProgressDialog(message: "Please Wait..",));
+
+    var details =await AssistantMethods.obtainPlaceDirections(pickuplatlng, dropofflatlng);
+
+    Navigator.pop(context);
+
+    print("LOCATION TO ACHIEVE =====================");
+    print("${details!.duration}hr ");
+    print("LOCATION TO ACHIEVE in distance=====================");
+    print("${details!.distancevalue}KM");
+
   }
 }

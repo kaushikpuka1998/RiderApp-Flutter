@@ -316,11 +316,11 @@ class PredictionTile extends StatelessWidget {
             if(abc["properties"]["feature_type"]=="details")
               {
                 address.wholeadd =abc["properties"]["formatted"];
-                print(address.wholeadd);
+                //print(address.wholeadd);
                 address.latitude = abc["properties"]["lat"];
-                print(address.latitude);
+                //print(address.latitude);
                 address.longitude = abc["properties"]["lon"];
-                print(address.longitude);
+                //print(address.longitude);
               }
 
 
@@ -329,6 +329,9 @@ class PredictionTile extends StatelessWidget {
 
       Provider.of<AppData>(context,listen: false).updatedropdownAddress(address);
       print("hello====>>"+address.wholeadd);
+
+
+      Navigator.pop(context,"obtainDirection");
 
 
 
