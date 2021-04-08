@@ -370,6 +370,29 @@ class _mainscreenState extends State<mainscreen> {
 
         polylineSet.add(polyline);
       });
+
+      LatLngBounds latLngBounds;
+
+
+      if(pickuplatlng.latitude > dropofflatlng.latitude && pickuplatlng.longitude > dropofflatlng.longitude)
+        {
+          latLngBounds = LatLngBounds(southwest: dropofflatlng, northeast: pickuplatlng);
+        }
+      else if(pickuplatlng.longitude > dropofflatlng.longitude)
+      {
+        latLngBounds = LatLngBounds(southwest: LatLng(pickuplatlng.latitude,dropofflatlng.longitude), northeast: LatLng(dropofflatlng.latitude,pickuplatlng.longitude));
+      }
+      else if(pickuplatlng.latitude > dropofflatlng.latitude)
+      {
+        latLngBounds = LatLngBounds(southwest: LatLng(dropofflatlng.latitude,pickuplatlng.longitude), northeast: LatLng(pickuplatlng.latitude,pickuplatlng.longitude));
+      }
+      else {
+          latLngBounds = LatLngBounds(southwest: pickuplatlng, northeast: dropofflatlng);
+
+
+      }
+
+      newgoogleMapController.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
       
 
 
