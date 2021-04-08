@@ -405,14 +405,15 @@ class _mainscreenState extends State<mainscreen> {
       
       Marker pickupLocator = Marker(
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-          infoWindow: InfoWindow(title: initpos.wholeadd,snippet: "My Location"),
+          infoWindow: InfoWindow(title: initpos.wholeadd,snippet:"Pick Up Location" ),
           position:pickuplatlng,
           markerId: MarkerId("pickupId"));
 
     Marker dropoffLocator = Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-        infoWindow: InfoWindow(title: finalpos.wholeadd,snippet: "Drop Down Location"),
+        infoWindow: InfoWindow(title: finalpos.wholeadd,snippet: "ETA:${details.duration} Hr,  Distance:${details.distancevalue} KM"),
         position:dropofflatlng,
+
         markerId: MarkerId("dropoffId"));
       
     
