@@ -43,7 +43,8 @@ class _mainscreenState extends State<mainscreen> {
 
   double bottomPaddingofMap = 0;
 
-
+  Set<Marker> markerset = {};
+  Set<Circle> circleset = {};
 
   void locatePosition() async
   {
@@ -132,6 +133,8 @@ class _mainscreenState extends State<mainscreen> {
             myLocationEnabled: true,
             zoomControlsEnabled: true,
             zoomGesturesEnabled: true,
+            markers: markerset,
+            circles: circleset,
             polylines: polylineSet,
             onMapCreated: (GoogleMapController controller){
 
@@ -328,7 +331,7 @@ class _mainscreenState extends State<mainscreen> {
     pLineCordinates.clear();
     polylineSet.clear();
     var allfeature = res["features"] as List;
-      pLineCordinates.clear();
+
       for( var abc in allfeature)
         {
           //print(abc["geometry"]["coordinates"]);
@@ -341,7 +344,7 @@ class _mainscreenState extends State<mainscreen> {
 
                   pLineCordinates.add(LatLng(eachcordinate[1],eachcordinate[0]));
 
-                  print("${eachcordinate[1]},${eachcordinate[0]}");
+                  //print("${eachcordinate[1]},${eachcordinate[0]}");
                 }
 
 
@@ -351,14 +354,18 @@ class _mainscreenState extends State<mainscreen> {
 
           //
         }
+      if(pLineCordinates.isEmpty)
+        {
+          pLineCordinates.clear();
+          polylineSet.clear();
+        }
 
 
 
-
-      polylineSet.clear();
+    polylineSet.clear();
       setState(() {
         Polyline polyline = Polyline(
-            color: Colors.redAccent,
+            color: Colors.black,
             polylineId: PolylineId("PolylineID"),
             jointType: JointType.round,
             points:pLineCordinates,
@@ -370,6 +377,8 @@ class _mainscreenState extends State<mainscreen> {
 
         polylineSet.add(polyline);
       });
+
+
 
       LatLngBounds latLngBounds;
 
@@ -394,6 +403,51 @@ class _mainscreenState extends State<mainscreen> {
 
       newgoogleMapController.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
       
+      Marker pickupLocator = Marker(
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          infoWindow: InfoWindow(title: initpos.wholeadd,snippet: "My Location"),
+          position:pickuplatlng,
+          markerId: MarkerId("pickupId"));
+
+    Marker dropoffLocator = Marker(
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        infoWindow: InfoWindow(title: finalpos.wholeadd,snippet: "Drop Down Location"),
+        position:dropofflatlng,
+        markerId: MarkerId("dropoffId"));
+      
+    
+    
+    setState(() {
+        markerset.add(pickupLocator);
+        markerset.add(dropoffLocator);
+    });
+
+    Circle pickupCircle = Circle(
+
+        fillColor: Colors.yellowAccent,
+        center: pickuplatlng,
+        radius: 12,
+        strokeWidth: 4,
+        strokeColor: Colors.yellow,
+        circleId: CircleId("pickupCircleID")
+    );
+
+    Circle dropoffCircle = Circle(
+
+        fillColor: Colors.redAccent,
+        center: dropofflatlng,
+        radius: 12,
+        strokeWidth: 4,
+        strokeColor: Colors.deepOrange,
+        circleId: CircleId("dropoffCircleID")
+    );
+
+
+    setState(() {
+
+      circleset.add(pickupCircle);
+      circleset.add(dropoffCircle);
+    });
 
 
 
