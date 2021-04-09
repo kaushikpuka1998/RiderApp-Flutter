@@ -48,6 +48,8 @@ dependencies:
 
   flutter_polyline_points: ^0.2.6
 
+  font_awesome_flutter: ^9.0.0
+
 
 
 
@@ -89,6 +91,9 @@ flutter:
     - images/locationpickicon.jpg
     - images/redlocation.png
     - images/greenlocation.png
+    - images/sedancar.jpg
+    - images/whitesedan.png
+
   fonts:
     - family: Roboto
       fonts:

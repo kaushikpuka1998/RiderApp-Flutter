@@ -11,8 +11,10 @@ import 'package:cloned_uber/Assistants/assistantMethods.dart';
 import 'package:cloned_uber/Assistants/requestAssistant.dart';
 import 'package:cloned_uber/DataHandler/appData.dart';
 import 'package:cloned_uber/configMap.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:geolocator/geolocator.dart';
@@ -40,6 +42,8 @@ class _mainscreenState extends State<mainscreen> {
 
   late Position currentPosition;
   var geolocator = Geolocator();
+
+  double totaldist = 0.0;
 
   double bottomPaddingofMap = 0;
 
@@ -291,6 +295,100 @@ class _mainscreenState extends State<mainscreen> {
 
             ),
           ),
+
+          Positioned(
+              bottom: 0.0,
+              left: 0.0,
+              right: 0.0,
+              child: Container(
+
+                decoration:BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft:Radius.circular(16.0) ,topRight:Radius.circular(16.0), ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 16.0,
+                      spreadRadius: 0.5,
+                      offset: Offset(0.7,0.7),
+                    ),
+                  ],
+                ),
+
+
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      color: Colors.black,
+                      height: 125,
+                      padding: EdgeInsets.symmetric(vertical: 30.0),
+                      child:Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 17.0),
+                        child: Row(
+                          children: [
+                            Image.asset("images/whitesedan.png",height: 80.0,width: 80.0,),
+                            SizedBox(width: 12.0,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "Sedan ",style:TextStyle(fontSize: 18.0,fontFamily: "Roboto",color: Colors.white),
+                                ),
+
+                                Text(
+                                  "Total distance: ${totaldist} KM",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.green),
+                                ),
+                                Text(
+                                  "Price: ${totaldist*15} Rs",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.purpleAccent),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 20.0,),
+                    Padding(
+                        padding:EdgeInsets.symmetric(horizontal: 20.0),
+
+                        child: Row(
+                          children: [
+                            Icon(Icons.dashboard_rounded,size: 18.0,color: Colors.purple,),
+                            SizedBox(width: 12.0,),
+                            Text("Cash"),
+                            SizedBox(width: 6.0,),
+                            Icon(Icons.keyboard_arrow_down,color:Colors.black54,size:16.0,),
+                          ],
+                        ),
+                    ),
+
+                    SizedBox(height: 20.0,),
+                    
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 6.0),
+                      child: RaisedButton(
+
+                        onPressed: ()
+                        {
+                          print("Clicked");
+                        },
+                        color:Theme.of(context).accentColor,
+                        padding: EdgeInsets.all(14.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Booking Request",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 17.0,fontFamily: "Roboto",color: Colors.white),),
+                            Icon(Icons.directions_car_sharp,color: Colors.white,size:18.0),
+                          ],
+                        ),
+
+                      ),
+                    )
+                  ],
+                ),
+
+          ))
         ],
       ),
     );
@@ -317,6 +415,8 @@ class _mainscreenState extends State<mainscreen> {
     print("${details!.duration}hr ");
     print("LOCATION TO ACHIEVE in distance=====================");
     print("${details!.distancevalue}KM");
+
+    totaldist = details!.distancevalue;
 
 
 
