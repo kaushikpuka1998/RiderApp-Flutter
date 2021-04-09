@@ -24,9 +24,9 @@ class loginscreen extends StatelessWidget {
         children: [
           SizedBox(height: 75),
           Image(
-              image: AssetImage("images/cyclelogin.jpg"),
+              image: AssetImage("images/creamsedan.jpg"),
             width: 370,
-            height: 170,
+            height: 120,
             alignment: Alignment.topCenter,
           ),
           SizedBox(height: 55.0,),

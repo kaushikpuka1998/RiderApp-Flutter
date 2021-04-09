@@ -93,6 +93,8 @@ flutter:
     - images/greenlocation.png
     - images/sedancar.jpg
     - images/whitesedan.png
+    - images/greensedan.jpg
+    - images/creamsedan.jpg
 
   fonts:
     - family: Roboto

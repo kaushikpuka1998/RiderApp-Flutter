@@ -390,10 +390,10 @@ class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
                                   ),
 
                                   Text(
-                                    "Total distance: ${totaldist} KM",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.green),
+                                    "Total distance: ${AssistantMethods.roundDouble(totaldist,2)} KM",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.green),
                                   ),
                                   Text(
-                                    "Price: ${totaldist*15} Rs",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.purpleAccent),
+                                    "Price: ${AssistantMethods.roundDouble(totaldist*15,2)} Rs",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.purpleAccent),
                                   )
                                 ],
                               )
