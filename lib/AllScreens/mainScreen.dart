@@ -30,7 +30,7 @@ class mainscreen extends StatefulWidget {
   _mainscreenState createState() => _mainscreenState();
 }
 
-class _mainscreenState extends State<mainscreen> {
+class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
 
   Completer<GoogleMapController> _controllergooglemap = Completer();
   late GoogleMapController newgoogleMapController;
@@ -49,6 +49,41 @@ class _mainscreenState extends State<mainscreen> {
 
   Set<Marker> markerset = {};
   Set<Circle> circleset = {};
+
+  double rideDetailContainerheight=0.0;
+  double searchHeight = 400.0;
+
+  bool drawerOpen =true;
+
+  resetApp()
+  {
+    setState(() {
+      searchHeight = 340.0;
+      rideDetailContainerheight = 0.0;
+      bottomPaddingofMap = 250.0;
+
+      drawerOpen = true;
+      polylineSet.clear();
+      markerset.clear();
+      circleset.clear();
+      pLineCordinates.clear();
+    });
+
+    locatePosition();
+  }
+  void displayDetailcontainer() async
+  {
+    await getPlaceDirection();
+
+    setState(() {
+      searchHeight = 0.0;
+      rideDetailContainerheight = 250.0;
+      bottomPaddingofMap = 230.0;
+
+      drawerOpen = false;
+
+    });
+  }
 
   void locatePosition() async
   {
@@ -75,7 +110,7 @@ class _mainscreenState extends State<mainscreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Cycle Ride",style: TextStyle(fontFamily: 'Roboto'),),
+        title: Text("Rider",style: TextStyle(fontFamily: 'Roboto'),),
 
       ),
 
@@ -160,7 +195,15 @@ class _mainscreenState extends State<mainscreen> {
             child:GestureDetector(
 
               onTap: (){
-                scaffoldkey.currentState!.openDrawer();
+
+                if(drawerOpen)
+                  {
+                    scaffoldkey.currentState!.openDrawer();
+                  }else
+                    {
+                      resetApp();
+                    }
+
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -179,7 +222,7 @@ class _mainscreenState extends State<mainscreen> {
                 ),
                 child: CircleAvatar(
                   backgroundColor: Colors.black,
-                  child: Icon(Icons.menu),
+                  child: Icon((drawerOpen)?Icons.menu:Icons.close),
                 ),
               ),
             ),
@@ -190,109 +233,114 @@ class _mainscreenState extends State<mainscreen> {
             left: 0.0,
             right:0.0,
             bottom:0.0,
-            child: Container(
+            child: AnimatedSize(
+              vsync: this,
+              curve: Curves.bounceIn,
+              duration: new Duration(milliseconds: 180),
+              child: Container(
 
-              height: 320.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(18.0),topRight: Radius.circular(18.0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 16.0,
-                    spreadRadius: 0.5,
-                    offset: Offset(0.7,0.7),
-                  )
-                ]
-              ),
+                height: searchHeight,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(18.0),topRight: Radius.circular(18.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 16.0,
+                      spreadRadius: 0.5,
+                      offset: Offset(0.7,0.7),
+                    )
+                  ]
+                ),
 
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0,vertical: 38.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 6.0),
-                    Text("hi There",style: TextStyle(fontSize: 12.0),),
-                    Text("Where to?",style: TextStyle(fontSize: 20.0,fontFamily: "Roboto"),),
-                    SizedBox(height:20.0),
-                    GestureDetector(
-                      onTap: () async
-                      {
-                        var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>SearchScreen()));
-                        if(res == "obtainDirection")
-                          {
-                            await getPlaceDirection();
-                          }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(5.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black54,
-                                blurRadius: 6.0,
-                                spreadRadius: 0.5,
-                                offset: Offset(0.7,0.7),
-                              )
-                            ]
-                        ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0,vertical: 38.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 6.0),
+                      Text("hi There",style: TextStyle(fontSize: 12.0),),
+                      Text("Where to?",style: TextStyle(fontSize: 20.0,fontFamily: "Roboto"),),
+                      SizedBox(height:20.0),
+                      GestureDetector(
+                        onTap: () async
+                        {
+                          var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>SearchScreen()));
+                          if(res == "obtainDirection")
+                            {
+                             displayDetailcontainer();
+                            }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black54,
+                                  blurRadius: 6.0,
+                                  spreadRadius: 0.5,
+                                  offset: Offset(0.7,0.7),
+                                )
+                              ]
+                          ),
 
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            children: [
-                              Icon(Icons.search,color: Colors.green,),
-                              SizedBox(width: 10.0,),
-                              Text("Search Drop Off Location...")
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              children: [
+                                Icon(Icons.search,color: Colors.green,),
+                                SizedBox(width: 10.0,),
+                                Text("Search Drop Off Location...")
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    SizedBox(height:30.0),
-                    Row(
-                      children: [
-                        Icon(Icons.home,color:Colors.grey),
-                        SizedBox(width:12.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              Provider.of<AppData>(context).pickUpLocation != null ? Provider.of<AppData>(context).pickUpLocation.wholeadd:"Add home",
-                            ),
-                            SizedBox(height: 4.0,),
-                            Text("Your Home Address ",style: TextStyle(color: Colors.black54,fontSize: 12.0))
-                          ],
-                        )
-                      ],
-                    ),
+                      SizedBox(height:30.0),
+                      Row(
+                        children: [
+                          Icon(Icons.home,color:Colors.grey),
+                          SizedBox(width:12.0),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                Provider.of<AppData>(context).pickUpLocation != null ? Provider.of<AppData>(context).pickUpLocation.wholeadd:"Add home",
+                              ),
+                              SizedBox(height: 4.0,),
+                              Text("Your Home Address ",style: TextStyle(color: Colors.black54,fontSize: 12.0))
+                            ],
+                          )
+                        ],
+                      ),
 
-                    SizedBox(height:10.0),
+                      SizedBox(height:10.0),
 
-                    DividerWidget(),
+                      DividerWidget(),
 
-                    SizedBox(height:16.0),
-                    Row(
-                      children: [
-                        Icon(Icons.work,color:Colors.grey),
-                        SizedBox(width:12.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Add Work"),
-                            SizedBox(height: 4.0,),
-                            Text("Your Office Address ",style: TextStyle(color: Colors.black54,fontSize: 12.0))
-                          ],
-                        )
-                      ],
-                    )
+                      SizedBox(height:16.0),
+                      Row(
+                        children: [
+                          Icon(Icons.work,color:Colors.grey),
+                          SizedBox(width:12.0),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Add Work"),
+                              SizedBox(height: 4.0,),
+                              Text("Your Office Address ",style: TextStyle(color: Colors.black54,fontSize: 12.0))
+                            ],
+                          )
+                        ],
+                      )
 
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
+              ),
             ),
           ),
 
@@ -300,95 +348,101 @@ class _mainscreenState extends State<mainscreen> {
               bottom: 0.0,
               left: 0.0,
               right: 0.0,
-              child: Container(
+              child: AnimatedSize(
 
-                decoration:BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(topLeft:Radius.circular(16.0) ,topRight:Radius.circular(16.0), ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black,
-                      blurRadius: 16.0,
-                      spreadRadius: 0.5,
-                      offset: Offset(0.7,0.7),
-                    ),
-                  ],
-                ),
+              vsync: this,
+              curve: Curves.bounceIn,
+              duration: new Duration(milliseconds: 180),
+                child: Container(
+                    height:rideDetailContainerheight,
+                  decoration:BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topLeft:Radius.circular(16.0) ,topRight:Radius.circular(16.0), ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 16.0,
+                        spreadRadius: 0.5,
+                        offset: Offset(0.7,0.7),
+                      ),
+                    ],
+                  ),
 
 
-                child: Column(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      color: Colors.black,
-                      height: 125,
-                      padding: EdgeInsets.symmetric(vertical: 30.0),
-                      child:Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 17.0),
-                        child: Row(
-                          children: [
-                            Image.asset("images/whitesedan.png",height: 80.0,width: 80.0,),
-                            SizedBox(width: 12.0,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "Sedan ",style:TextStyle(fontSize: 18.0,fontFamily: "Roboto",color: Colors.white),
-                                ),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        color: Colors.black,
+                        height: 125,
+                        padding: EdgeInsets.symmetric(vertical: 30.0),
+                        child:Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 17.0),
+                          child: Row(
+                            children: [
+                              Image.asset("images/whitesedan.png",height: 80.0,width: 80.0,),
+                              SizedBox(width: 12.0,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      "Sedan ",style:TextStyle(fontSize: 18.0,fontFamily: "Roboto",color: Colors.white),
+                                  ),
 
-                                Text(
-                                  "Total distance: ${totaldist} KM",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.green),
-                                ),
-                                Text(
-                                  "Price: ${totaldist*15} Rs",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.purpleAccent),
-                                )
-                              ],
-                            )
-                          ],
+                                  Text(
+                                    "Total distance: ${totaldist} KM",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.green),
+                                  ),
+                                  Text(
+                                    "Price: ${totaldist*15} Rs",style: TextStyle(fontSize: 15.0,fontFamily: "Roboto",color:Colors.purpleAccent),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
 
-                    SizedBox(height: 20.0,),
-                    Padding(
-                        padding:EdgeInsets.symmetric(horizontal: 20.0),
+                      SizedBox(height: 20.0,),
+                      Padding(
+                          padding:EdgeInsets.symmetric(horizontal: 20.0),
 
-                        child: Row(
-                          children: [
-                            Icon(Icons.dashboard_rounded,size: 18.0,color: Colors.purple,),
-                            SizedBox(width: 12.0,),
-                            Text("Cash"),
-                            SizedBox(width: 6.0,),
-                            Icon(Icons.keyboard_arrow_down,color:Colors.black54,size:16.0,),
-                          ],
-                        ),
-                    ),
-
-                    SizedBox(height: 20.0,),
-                    
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 6.0),
-                      child: RaisedButton(
-
-                        onPressed: ()
-                        {
-                          print("Clicked");
-                        },
-                        color:Theme.of(context).accentColor,
-                        padding: EdgeInsets.all(14.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Booking Request",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 17.0,fontFamily: "Roboto",color: Colors.white),),
-                            Icon(Icons.directions_car_sharp,color: Colors.white,size:18.0),
-                          ],
-                        ),
-
+                          child: Row(
+                            children: [
+                              Icon(Icons.dashboard_rounded,size: 18.0,color: Colors.purple,),
+                              SizedBox(width: 12.0,),
+                              Text("Cash"),
+                              SizedBox(width: 6.0,),
+                              Icon(Icons.keyboard_arrow_down,color:Colors.black54,size:16.0,),
+                            ],
+                          ),
                       ),
-                    )
-                  ],
-                ),
 
-          ))
+                      SizedBox(height: 20.0,),
+
+                      Padding(padding: EdgeInsets.symmetric(horizontal: 6.0),
+                        child: RaisedButton(
+
+                          onPressed: ()
+                          {
+                            print("Clicked");
+                          },
+                          color:Theme.of(context).accentColor,
+                          padding: EdgeInsets.all(14.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Booking Request",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 17.0,fontFamily: "Roboto",color: Colors.white),),
+                              Icon(Icons.directions_car_sharp,color: Colors.white,size:18.0),
+                            ],
+                          ),
+
+                        ),
+                      )
+                    ],
+                  ),
+
+          ),
+              ))
         ],
       ),
     );
@@ -430,11 +484,12 @@ class _mainscreenState extends State<mainscreen> {
     //double a1=0.0,a2 =0.0;
     pLineCordinates.clear();
     polylineSet.clear();
-    var allfeature = res["features"] as List;
+    var allfeature = res["features"] as List<dynamic>;
 
       for( var abc in allfeature)
         {
-          //print(abc["geometry"]["coordinates"]);
+          //print("Initialposition LAT AND LNG:${initpos.latitude} & ${initpos.longitude}");
+          //print("${abc["geometry"]},${["coordinates"]}");
           for(var allcordinate in abc["geometry"]["coordinates"])
             {
               for( var eachcordinate in allcordinate)

@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Uber Clone',
 
-        home: new mainscreen(),
+        home: new loginscreen(),
         debugShowCheckedModeBanner: false,
 
 
