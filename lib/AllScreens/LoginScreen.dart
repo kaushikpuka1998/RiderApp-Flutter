@@ -24,7 +24,7 @@ class loginscreen extends StatelessWidget {
         children: [
           SizedBox(height: 75),
           Image(
-              image: AssetImage("images/creamsedan.jpg"),
+              image: AssetImage("images/bluecar.jpg"),
             width: 370,
             height: 120,
             alignment: Alignment.topCenter,
@@ -172,7 +172,7 @@ class loginscreen extends StatelessWidget {
 
     }else{
       //error occured;
-      displayToastMsg("Error Occoured ,Not Signed In", context);
+      displayToastMsg("Invalid Email or Password", context);
     }
   }
 

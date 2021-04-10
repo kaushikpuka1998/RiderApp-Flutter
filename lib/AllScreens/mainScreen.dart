@@ -51,14 +51,14 @@ class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
   Set<Circle> circleset = {};
 
   double rideDetailContainerheight=0.0;
-  double searchHeight = 400.0;
+  double searchHeight = 230.0;
 
   bool drawerOpen =true;
 
   resetApp()
   {
     setState(() {
-      searchHeight = 340.0;
+      searchHeight = 230.0;
       rideDetailContainerheight = 0.0;
       bottomPaddingofMap = 250.0;
 
@@ -181,7 +181,7 @@ class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
               newgoogleMapController = controller;
 
               setState(() {
-                bottomPaddingofMap = 330.0;
+                bottomPaddingofMap = 320.0;
               });
 
               locatePosition();
@@ -254,7 +254,7 @@ class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
                 ),
 
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0,vertical: 38.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 18.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -312,29 +312,11 @@ class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
                               SizedBox(height: 4.0,),
                               Text("Your Home Address ",style: TextStyle(color: Colors.black54,fontSize: 12.0))
                             ],
-                          )
+                          ),
                         ],
                       ),
 
-                      SizedBox(height:10.0),
 
-                      DividerWidget(),
-
-                      SizedBox(height:16.0),
-                      Row(
-                        children: [
-                          Icon(Icons.work,color:Colors.grey),
-                          SizedBox(width:12.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Add Work"),
-                              SizedBox(height: 4.0,),
-                              Text("Your Office Address ",style: TextStyle(color: Colors.black54,fontSize: 12.0))
-                            ],
-                          )
-                        ],
-                      )
 
                     ],
                   ),
@@ -465,16 +447,16 @@ class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
 
     Navigator.pop(context);
 
-    print("LOCATION TO ACHIEVE =====================");
-    print("${details!.duration}hr ");
-    print("LOCATION TO ACHIEVE in distance=====================");
-    print("${details!.distancevalue}KM");
-
-    totaldist = details!.distancevalue;
-
+        print("LOCATION TO ACHIEVE =====================");
+        print("${details!.duration}hr ");
+        print("LOCATION TO ACHIEVE in distance=====================");
+        print("${details!.distancevalue}KM");
+        totaldist = details!.distancevalue;
 
 
-    String directionUrl = "https://api.geoapify.com/v1/routing?waypoints=${initpos.latitude},${initpos.longitude}|${finalpos.latitude},${finalpos.longitude}&mode=drive&lang=en&apiKey=$geoapikey";
+
+
+        String directionUrl = "https://api.geoapify.com/v1/routing?waypoints=${initpos.latitude},${initpos.longitude}|${finalpos.latitude},${finalpos.longitude}&mode=drive&lang=en&apiKey=$geoapikey";
 
 
 
@@ -566,7 +548,7 @@ class _mainscreenState extends State<mainscreen> with TickerProviderStateMixin {
 
     Marker dropoffLocator = Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-        infoWindow: InfoWindow(title: finalpos.wholeadd,snippet: "ETA:${details.duration} Hr,  Distance:${details.distancevalue} KM"),
+        infoWindow: InfoWindow(title: finalpos.wholeadd,snippet: "ETA:${details!.duration} Hr,  Distance:${details!.distancevalue} KM"),
         position:dropofflatlng,
 
         markerId: MarkerId("dropoffId"));

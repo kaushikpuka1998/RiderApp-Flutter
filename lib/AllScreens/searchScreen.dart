@@ -63,7 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             Navigator.pop(context);
                           },
 
-                          child: Icon(Icons.arrow_back_ios_new)
+                          child: Icon(Icons.arrow_back_outlined)
                       ),
                       Center(
                         child: Text("Set Drop Off",style:TextStyle(fontFamily: "Roboto",fontSize: 18.0)),
@@ -148,9 +148,9 @@ class _SearchScreenState extends State<SearchScreen> {
             (placePredictionList.length > 0)?
 
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0,horizontal: 22.0),
+                padding: EdgeInsets.symmetric(vertical: 17.0,horizontal: 22.0),
                 child: ListView.separated(
-                  padding: EdgeInsets.all(1.0),
+                  padding: EdgeInsets.all(2.0),
                   itemBuilder: (context,index)
                   {
                     return PredictionTile(placePredictions: placePredictionList[index]);
@@ -175,7 +175,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if(placename.length > 1)
     {
       //String autocompleteurl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placename&key=$mapkey&sessiontoken=1234567890";
-      String autocompleteurl = "https://api.geoapify.com/v1/geocode/autocomplete?text=$placename&lang=en&limit=7&type=amenity&bias=countrycode:auto&apiKey=$geoapikey";
+      String autocompleteurl = "https://api.geoapify.com/v1/geocode/autocomplete?text=$placename&lang=en&limit=5&type=amenity&bias=countrycode:auto&apiKey=$geoapikey";
 
 
 
@@ -231,7 +231,7 @@ class PredictionTile extends StatelessWidget {
 
   PlacePredictions placePredictions=new PlacePredictions("","","","");
 
-  PredictionTile({Key? key,required this.placePredictions}) : super(key: key);
+  PredictionTile({Key? key, required  this.placePredictions}) : super(key: key);
   @override
   Widget build(BuildContext context)
   {
@@ -257,9 +257,9 @@ class PredictionTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      Text(placePredictions.place_name??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.lightBlue,fontFamily: "Roboto",fontSize: 16.0,),),
+                      Text(placePredictions.place_name,overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.lightBlue,fontFamily: "Roboto",fontSize: 16.0,),),
                       SizedBox(height:6.0),
-                      Text(placePredictions.shortlocation??'',overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 14.0,),),
+                      Text(placePredictions.shortlocation,overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.green,fontFamily: "Roboto",fontSize: 14.0,),),
                       Text(placePredictions.country.toUpperCase(),overflow:TextOverflow.ellipsis,style: TextStyle(color:Colors.red,fontFamily: "Roboto",fontSize: 10.0,),),
                       SizedBox(height:15.0),
                     ],

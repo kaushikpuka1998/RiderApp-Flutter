@@ -1,4 +1,4 @@
-import '../configMap.dart';
+
 
 class PlacePredictions
 {
