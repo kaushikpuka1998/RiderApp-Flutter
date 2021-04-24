@@ -1,5 +1,4 @@
-
-
+// @dart=2.9
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:cloned_uber/AllScreens/SplashScreen.dart';
 import 'package:cloned_uber/DataHandler/appData.dart';
@@ -14,30 +13,25 @@ import 'package:cloned_uber/AllScreens/RegistrationScreen.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
+DatabaseReference userref =
+    FirebaseDatabase.instance.reference().child("users");
 
-
-DatabaseReference userref = FirebaseDatabase.instance.reference().child("users");
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) =>AppData(),
+      create: (context) => AppData(),
       child: MaterialApp(
         title: 'Uber Clone',
-
         home: new loginscreen(),
         debugShowCheckedModeBanner: false,
-
-
-
-
         theme: ThemeData(
           // This is the theme of your application.
           //
@@ -49,26 +43,19 @@ class MyApp extends StatelessWidget {
           // Notice that the counter didn't reset back to zero; the application
           // is not restarted.
           primarySwatch: Colors.blue,
-
-
         ),
-
-
-        routes:
-        {
+        routes: {
           registrationScreen.idScreen: (context) => registrationScreen(),
-          loginscreen.idScreen: (context) =>loginscreen(),
-          mainscreen.idScreen: (context) =>mainscreen(),
+          loginscreen.idScreen: (context) => loginscreen(),
+          mainscreen.idScreen: (context) => mainscreen(),
         },
-
-
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key ? key, required this.title}) : super(key: key);
+  MyHomePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
