@@ -14,7 +14,7 @@ This project is a starting point for a Flutter application.
   <img src="images/SS3.png" width="200" height="400" />
   <img src="images/SS7.png" width="200" height="400" />
   <img src="images/SS6.png" width="200" height="400" />
-  <img src="images/SS8.png" width="200" height="400" />
+  <img src="images/SS8.jpg" width="200" height="400" />
 
  
   
